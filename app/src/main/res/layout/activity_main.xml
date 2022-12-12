@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/access_serve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="access_perm"
+        android:onClick="access_ser"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="266dp" />
+
+
+    <Button
+        android:id="@+id/exr_perm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="storage_perm"
+        android:onClick="exter_perm"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="266dp" />
+
+</LinearLayout>
