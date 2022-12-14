@@ -8,7 +8,9 @@ import androidx.core.app.ActivityCompat;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,14 +23,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
     Button Access_btn, Sbmt_btn;
@@ -41,18 +50,6 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
         setContentView(R.layout.activity_main);
         Dialog dialog = new Dialog(MainActivity.this);
 
-//        List<String> categories = new ArrayList<String>();
-//        categories.add("Automobile");
-//        categories.add("electronics");
-//        categories.add("Business Services");
-//        categories.add("Computers");
-//        categories.add("Education");
-//        categories.add("Personal");
-//        categories.add("Travel");
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        Education.setAdapter(adapter);
 //////////////////////////////////////////////
         dialog.setContentView(R.layout.data);
 
@@ -94,7 +91,7 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
             @Override
             public void onClick(View v) {
 //                dialog.dismiss();
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+
 //                Toast.makeText(MainActivity.this, "okay clicked", Toast.LENGTH_SHORT).show();
             }
         });
@@ -102,6 +99,7 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
         Sbmt_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                ActivityCompat.requestPermissions(MainActivity.this,new String[]{WRITE_EXTERNAL_STORAGE},3);
                 StringBuilder result=new StringBuilder();
 
                 if(agri.isChecked()){
@@ -141,10 +139,10 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
                 String U_ocu=  occupation;
                 String U_Chek =  chekbox_choices;
  //               String U_data = About+education+occupation+chekbox_choices;
-                String urlString = "https://4465-122-169-93-39.in.ngrok.io/user/create"; // URL to call
+                String urlString = "https://perfect-eel-fashion.cyclic.app/user/create"; // URL to call
                 // String data = params[1]; //data to post
                // OutputStream out = null;
-
+                String response = "";
 
 
                 try {
@@ -170,6 +168,37 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
                     o.writeBytes(jsonBody.toString());
                     o.flush();
                     o.close();
+                    Log.e("close","After close:"+ o);
+                    int responseCode=urlConnection.getResponseCode();
+                    Log.e("ghr","Response code "+responseCode );
+                    if (responseCode == HttpsURLConnection.HTTP_OK) {
+                        String line;
+                        BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                        Log.e("dee","hhhh");
+                         while ((line=br.readLine()) != null) {
+                            response+=line;
+                           String resid= response;
+//                             final JSONObject obj = new JSONObject(response);
+//                             final JSONArray geodata = obj.getJSONArray("geodata");
+                             final JSONObject user = new JSONObject(response);
+
+                             Log.e("resid",user.getString(("user_id")));
+////////////////////////////////////
+                             String UserID = user.getString(("user_id"));
+                             SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref",MODE_PRIVATE);
+
+                             SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+
+                             myEdit.putString("Userid", UserID);
+
+                             myEdit.apply();
+/////////////////////////////////////////////////
+
+                             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
+
+                        }
+                    }
 
                     Log.e("connn",String.valueOf(urlConnection.getResponseCode()));
                     Log.e("connn",String.valueOf(urlConnection.getResponseMessage()));
@@ -178,7 +207,7 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
                     urlConnection.disconnect();
                 } catch (Exception e) {
                     Log.e("techh", String.valueOf(e));
-                    System.out.println(e.getMessage());
+                    System.out.println("Error in api calling: "+ String.valueOf(e));
                 }
 
 
@@ -195,14 +224,18 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
 //                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{ACCESS_COARSE_LOCATION},2);
 //                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{ACCESS_FINE_LOCATION},3);
 
-              //  dialog.dismiss();
-                Toast.makeText(MainActivity.this, "Cancel clicked", Toast.LENGTH_SHORT).show();
+              // dialog.dismiss();
+//                Toast.makeText(MainActivity.this, "Cancel clicked", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
             }
+
         });
 
         dialog.show();
 
 
     }
+
 
 }
