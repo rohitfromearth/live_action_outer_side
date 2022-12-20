@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "live_action_outer_side"
-include ':app'
+include ':app','liveactionsprt'

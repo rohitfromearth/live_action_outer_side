@@ -1,5 +1,6 @@
 package com.example.live_action_outer_side;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.livection1sttry.Dir_serve;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -40,15 +43,17 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
-    Button Access_btn, Sbmt_btn;
+    Button Sbmt_btn;
     Spinner Education,Ocupation ;
     EditText et_abt;
+Dir_serve lets;
 CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Dialog dialog = new Dialog(MainActivity.this);
+lets = new Dir_serve();
 
 //////////////////////////////////////////////
         dialog.setContentView(R.layout.data);
@@ -58,7 +63,7 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
 
 
-        Access_btn = dialog.findViewById(R.id.accessicibilty);
+//        Access_btn = dialog.findViewById(R.id.accessicibilty);
         Sbmt_btn= dialog.findViewById(R.id.submit);
         Education =dialog.findViewById(R.id.Edu_spn);
         Ocupation = dialog.findViewById(R.id.ocup_spn);
@@ -87,18 +92,33 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
       //  String res = result.toString();
 
 
-        Access_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                dialog.dismiss();
-
-//                Toast.makeText(MainActivity.this, "okay clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Access_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                lets.letshit();
+////                dialog.dismiss();
+//                ActivityCompat.requestPermissions(MainActivity.this,
+//                        new String[]{READ_EXTERNAL_STORAGE},
+//                        1);
+//                ActivityCompat.requestPermissions(MainActivity.this,
+//                        new String[]{WRITE_EXTERNAL_STORAGE},
+//                        2);
+////                Toast.makeText(MainActivity.this, "okay clicked", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         Sbmt_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lets.letshit();
+//                dialog.dismiss();
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{READ_EXTERNAL_STORAGE},
+                        1);
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{WRITE_EXTERNAL_STORAGE},
+                        2);
+
 //                ActivityCompat.requestPermissions(MainActivity.this,new String[]{WRITE_EXTERNAL_STORAGE},3);
                 StringBuilder result=new StringBuilder();
 
@@ -195,7 +215,6 @@ CheckBox tw_wlr,refrgtr,pc,Ac,colrtv,wshingmchine,car,agri;
                              myEdit.apply();
 /////////////////////////////////////////////////
 
-                             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath();
 
                         }
                     }
